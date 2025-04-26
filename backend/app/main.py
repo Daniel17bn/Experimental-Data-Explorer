@@ -1,12 +1,8 @@
 import uvicorn
-import os
 import shutil
 
 from fastapi import FastAPI,File,UploadFile,BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-
-from scripts.csv_to_xes import csv_to_xes
-from scripts.xes_dfg import xes_dfg
 
 
 app = FastAPI()
@@ -15,18 +11,22 @@ origins = ["http://localhost:3000"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+@app.post("/uploadfile/")
+async def upload_file(file: UploadFile = File(...)):
+    with open(f"uploads/{file.filename}", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    return {"info": f"file '{file.filename}' saved"}
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
-IMPORT_FOLDER = "backend/data/raw"
+
+
+''' 
 PROCESSED_FOLDER = "backend/data/xes"
 DFG_FOLDER = "backend/data/dfg_json"
 
@@ -74,10 +74,7 @@ async def get_dfg(filename: str):
             "error": f"Failed to process XES file: {str(e)}",
             "status": "error"
         }
-
-
-
-
+'''
 
 if __name__ == "__main__":
     uvicorn.run(app, host = "0.0.0.0",port=8000)
