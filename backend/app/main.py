@@ -31,7 +31,7 @@ async def upload_file(file: UploadFile = File(...)):
 async def process_file(file:str):
     filename, _ = os.path.splitext(file)
 
-    upload_path = f"../data/uploads/{filename}"
+    upload_path = f"../data/uploads/{filename}.csv"
     xes_path = f"../data/xes/{filename}.xes"
     dfg_path = f"../data/dfg_json/{filename}.json"
 
@@ -51,6 +51,9 @@ async def getDFG(file: str):
         dfg_data = json.load(f)
 
     return {"dfg": dfg_data}
+
+
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host = "0.0.0.0",port=8000)
