@@ -1,5 +1,7 @@
 import uvicorn
 import shutil
+import json
+import os
 
 from fastapi import FastAPI,File,UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,11 +29,28 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/processfile/")
 async def process_file(file:str):
-    upload_path = f"../data/uploads/{file}"
-    xes_path = f"../data/xes/{file.split(".")[0]}.xes"
+    filename, _ = os.path.splitext(file)
+
+    upload_path = f"../data/uploads/{filename}"
+    xes_path = f"../data/xes/{filename}.xes"
+    dfg_path = f"../data/dfg_json/{filename}.json"
 
     csv_to_xes(upload_path, xes_path)
     dfg = xes_dfg(xes_path)
+
+    with open(dfg_path,"w") as f:
+        json.dump(dfg,f)
+
+    return {"message": "File processed successfully."}
+
+@app.get("/getDFG/")
+async def getDFG(file: str):
+    dfg_path = f"../data/dfg_json/{file}"
+
+    with open(dfg_path, "r") as f:
+        dfg_data = json.load(f)
+
+    return {"dfg": dfg_data}
 
 if __name__ == "__main__":
     uvicorn.run(app, host = "0.0.0.0",port=8000)
