@@ -53,7 +53,7 @@ async def getDFG(file: str):
     return {"dfg": dfg_data}
 
 
-print()
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host = "0.0.0.0",port=8000)
