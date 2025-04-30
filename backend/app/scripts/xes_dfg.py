@@ -1,4 +1,7 @@
 import pm4py
+import os
+import json
+
 
 def xes_dfg(xes_path: str) -> dict:
 
@@ -17,10 +20,20 @@ def xes_dfg(xes_path: str) -> dict:
     for (source,target),count in dfg.items():
         edges.append({"data" : {"source":source, "target": target, "label": f"Count:{count}", "count":count}})
 
-
     cytoscape_graph = {
         "nodes": nodes,
         "edges": edges
     }
+
+    output_path = "../../data/dfg_json/"
+
+
+    os.makedirs(output_path, exist_ok=True)
+
+    output_file = os.path.join(output_path,"cytoscape_graph.json")
+
+    with open(output_file, "w") as f:
+        json.dump(cytoscape_graph,f,indent=4)
+
 
     return cytoscape_graph
