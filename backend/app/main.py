@@ -10,11 +10,11 @@ from scripts import csv_to_xes, xes_dfg
 
 app = FastAPI()
 
-origins = ["http://localhost:3000"]
+origins = ["http://localhost:5173"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,7 +52,15 @@ async def getDFG(file: str):
 
     return {"dfg": dfg_data}
 
-
+@app.get("/getDFGFiles")
+async def get_files():
+    dfg_dir = "../data/dfg_json/"
+    try:
+        files = [f for f in os.listdir(dfg_dir) if f.endswith('.json')]
+        return files
+    except Exception as e:
+        return {"error": str(e)}
+        # Returning an error mes
 
 
 if __name__ == "__main__":
