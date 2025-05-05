@@ -6,6 +6,7 @@ import os
 from fastapi import FastAPI,File,UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+from pydantic import BaseModel
 from scripts import csv_to_xes, xes_dfg
 
 app = FastAPI()
@@ -26,20 +27,38 @@ async def upload_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     return {"info": f"file '{file.filename}' saved"}
 
+# Define the Pydantic model for the request body
+class FileNameRequest(BaseModel):
+    file_name: str
 
 @app.post("/processfile/")
-async def process_file(file:str):
-    filename, _ = os.path.splitext(file)
+async def process_file(request: FileNameRequest):
+    
+    file_name = request.file_name  # Extract the file name from the request
+    filename, _ = os.path.splitext(file_name)  # Extract the filename without extension
 
-    upload_path = f"../data/uploads/{filename}.csv"
+    # Define paths
+    upload_path = f"../data/uploads/{file_name}"
     xes_path = f"../data/xes/{filename}.xes"
     dfg_path = f"../data/dfg_json/{filename}.json"
 
-    csv_to_xes(upload_path, xes_path)
-    dfg = xes_dfg(xes_path)
+    # Check if the uploaded file exists
+    if not os.path.exists(upload_path):
+        return {"error": f"File '{upload_path}' does not exist. Please upload it first."}
 
-    with open(dfg_path,"w") as f:
-        json.dump(dfg,f)
+    # Process the file
+    try:
+        csv_to_xes(upload_path, xes_path)  # Convert CSV to XES
+        dfg = xes_dfg(xes_path)  # Generate the DFG
+    except Exception as e:
+        return {"error": f"An error occurred during processing: {str(e)}"}
+
+    # Save the DFG as a JSON file
+    try:
+        with open(dfg_path, "w") as f:
+            json.dump(dfg, f)
+    except Exception as e:
+        return {"error": f"Failed to save DFG JSON: {str(e)}"}
 
     return {"message": "File processed successfully."}
 

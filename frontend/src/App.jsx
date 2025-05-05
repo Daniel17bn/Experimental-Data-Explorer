@@ -1,14 +1,18 @@
 import React from 'react';
-import Graph from './components/Graph';
+import Dropdown from './components/Dropdown';
+import FileUploader from './components/FileUploader';
 
 function App() {
     return(
         <>
             <h1>BSP Projet</h1>
-            <Graph/>
+            <div>
+                <FileUploader/>
+            </div>
+            
         </>
   
     )
 }
 
-export default App
+export default App;
