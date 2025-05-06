@@ -66,8 +66,17 @@ async def process_file(request: FileNameRequest):
 async def getDFG(file: str):
     dfg_path = f"../data/dfg_json/{file}"
 
-    with open(dfg_path, "r") as f:
-        dfg_data = json.load(f)
+    # Check if the file exists
+    if not os.path.exists(dfg_path):
+        return {"error": f"File '{file}' does not exist in the directory."}
+
+    try:
+        with open(dfg_path, "r") as f:
+            dfg_data = json.load(f)
+    except json.JSONDecodeError:
+        return {"error": f"File '{file}' is not a valid JSON file."}
+    except Exception as e:
+        return {"error": f"An error occurred while reading the file: {str(e)}"}
 
     return {"dfg": dfg_data}
 
