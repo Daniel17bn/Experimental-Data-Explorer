@@ -1,18 +1,20 @@
 import React from 'react';
-import Dropdown from './components/Dropdown';
 import FileUploader from './components/FileUploader';
+import Graph from './components/Graph';
 
 function App() {
-    return(
+    return (
         <>
-            <h1>BSP Projet</h1>
+            <h1>BSP Project</h1>
             <div>
-                <FileUploader/>
+                <FileUploader />
             </div>
-            
+            <div style={{ marginTop: '2rem' }}>
+                <h2>Graph Visualization</h2>
+                <Graph />
+            </div>
         </>
-  
-    )
+    );
 }
 
 export default App;
