@@ -27,9 +27,11 @@ def xes_dfg(xes_path: str) -> dict:
 
     output_path = "../../data/dfg_json/"
 
+    # Check if the folder exists
+    if not os.path.exists(output_path):
+        raise FileNotFoundError(f"The folder '{output_path}' does not exist. Please create it manually.")
 
-    os.makedirs(output_path, exist_ok=True)
-
+    
     output_file = os.path.join(output_path,"cytoscape_graph.json")
 
     with open(output_file, "w") as f:
