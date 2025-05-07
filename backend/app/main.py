@@ -85,6 +85,8 @@ async def get_files():
     dfg_dir = "../data/dfg_json"
     try:
         files = [f for f in os.listdir(dfg_dir) if os.path.isfile(os.path.join(dfg_dir, f))]
+        for i in range(len(files)):
+            files[i] = files[i].split(".")[0] 
     except FileNotFoundError:
         return {"error": f"Directory '{dfg_dir}' does not exist."}
     except Exception as e:
