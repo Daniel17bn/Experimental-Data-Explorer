@@ -80,15 +80,17 @@ async def getDFG(file: str):
 
     return {"dfg": dfg_data}
 
-@app.get("/getDFGFiles")
+@app.get("/getFilesList")
 async def get_files():
-    dfg_dir = "../data/dfg_json/"
+    dfg_dir = "../data/dfg_json"
     try:
-        files = [f for f in os.listdir(dfg_dir) if f.endswith('.json')]
-        return files
+        files = [f for f in os.listdir(dfg_dir) if os.path.isfile(os.path.join(dfg_dir, f))]
+    except FileNotFoundError:
+        return {"error": f"Directory '{dfg_dir}' does not exist."}
     except Exception as e:
-        return {"error": str(e)}
-        # Returning an error mes
+        return {"error": f"An error occurred: {str(e)}"}
+    return {"files": files}
+    
 
 
 if __name__ == "__main__":
