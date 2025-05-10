@@ -60,8 +60,8 @@ async def process_file(request: FileNameRequest):
 
     upload_path = UPLOADS_PATH / file_name # f"../data/uploads/{file_name}"
     xes_path = XES_PATH / f'{filename}.xes' # f"../data/xes/{filename}.xes"
-    dfg_path = DFG_PATH / f'{filename}.json' # f"../data/dfg_json/{filename}.json"
-
+    dfg_path = DFG_PATH                   # f"../data/dfg_json/{filename}.json"
+    dfg_name = f'{filename}.json' # f"../data/dfg_json/{filename}.json"
 
     # Check if the uploaded file exists
     if not os.path.exists(upload_path):
@@ -75,18 +75,12 @@ async def process_file(request: FileNameRequest):
         logger.info(f"/processfile/: Generating the DFG from the XES")
 
         # Have to convert from Path to string here since i think pm4py does not support it
-        dfg = xes_dfg(str(xes_path))  # Generate the DFG
+        dfg = xes_dfg(str(xes_path),str(dfg_path),str(dfg_name))  # Generate the DFG
 
     except Exception as e:
         return {"error": f"An error occurred during processing: {str(e)}"}
 
-    # Save the DFG as a JSON file
-    '''try:
-        with open(dfg_path, "w") as f:
-            json.dump(dfg, f)
-    except Exception as e:
-        return {"error": f"Failed to save DFG JSON: {str(e)}"}
-'''
+  
     return {"message": "File processed successfully."}
 
 @app.get("/getDFG/")
