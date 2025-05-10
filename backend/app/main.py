@@ -57,9 +57,11 @@ async def process_file(request: FileNameRequest):
     filename, _ = os.path.splitext(file_name)  # Extract the filename without extension
 
     # Define paths
+
     upload_path = UPLOADS_PATH / file_name # f"../data/uploads/{file_name}"
     xes_path = XES_PATH / f'{filename}.xes' # f"../data/xes/{filename}.xes"
     dfg_path = DFG_PATH / f'{filename}.json' # f"../data/dfg_json/{filename}.json"
+
 
     # Check if the uploaded file exists
     if not os.path.exists(upload_path):
@@ -69,20 +71,22 @@ async def process_file(request: FileNameRequest):
     try:
         logger.info(f"/processfile/: Processing the CSV to XES ({upload_path} -> {xes_path})")
         csv_to_xes(upload_path, xes_path)  # Convert CSV to XES
+
         logger.info(f"/processfile/: Generating the DFG from the XES")
 
         # Have to convert from Path to string here since i think pm4py does not support it
         dfg = xes_dfg(str(xes_path))  # Generate the DFG
+
     except Exception as e:
         return {"error": f"An error occurred during processing: {str(e)}"}
 
     # Save the DFG as a JSON file
-    try:
+    '''try:
         with open(dfg_path, "w") as f:
             json.dump(dfg, f)
     except Exception as e:
         return {"error": f"Failed to save DFG JSON: {str(e)}"}
-
+'''
     return {"message": "File processed successfully."}
 
 @app.get("/getDFG/")

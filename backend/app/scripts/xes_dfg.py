@@ -3,7 +3,7 @@ import os
 import json
 
 
-def xes_dfg(xes_path: str) -> dict:
+def xes_dfg(xes_path: str,output_path: str,json_file: str) -> dict:
 
     event_log = pm4py.read_xes(xes_path)
 
@@ -25,12 +25,11 @@ def xes_dfg(xes_path: str) -> dict:
         "edges": edges
     }
 
-    output_path = "../../data/dfg_json/"
 
 
     os.makedirs(output_path, exist_ok=True)
 
-    output_file = os.path.join(output_path,"cytoscape_graph.json")
+    output_file = os.path.join(output_path, json_file)
 
     with open(output_file, "w") as f:
         json.dump(cytoscape_graph,f,indent=4)
