@@ -40,7 +40,8 @@ async def process_file(request: FileNameRequest):
     # Define paths
     upload_path = f"../data/uploads/{file_name}"
     xes_path = f"../data/xes/{filename}.xes"
-    dfg_path = f"../data/dfg_json/{filename}.json"
+    dfg_path = f"../data/dfg_json/"
+    json_file = f"{filename}.json"
 
     # Check if the uploaded file exists
     if not os.path.exists(upload_path):
@@ -49,17 +50,17 @@ async def process_file(request: FileNameRequest):
     # Process the file
     try:
         csv_to_xes(upload_path, xes_path)  # Convert CSV to XES
-        dfg = xes_dfg(xes_path)  # Generate the DFG
+        xes_dfg(xes_path,dfg_path,json_file)  # Generate the DFG
     except Exception as e:
         return {"error": f"An error occurred during processing: {str(e)}"}
 
     # Save the DFG as a JSON file
-    try:
+    '''try:
         with open(dfg_path, "w") as f:
             json.dump(dfg, f)
     except Exception as e:
         return {"error": f"Failed to save DFG JSON: {str(e)}"}
-
+'''
     return {"message": "File processed successfully."}
 
 @app.get("/getDFG/")
