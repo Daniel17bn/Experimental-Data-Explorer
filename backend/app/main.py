@@ -85,7 +85,7 @@ async def process_file(request: FileNameRequest):
 
 @app.get("/getDFG/")
 async def getDFG(file: str):
-    dfg_path = f"../data/dfg_json/{file}"
+    dfg_path = DFG_PATH / f'{file}'
 
     # Check if the file exists
     if not os.path.exists(dfg_path):
@@ -99,11 +99,11 @@ async def getDFG(file: str):
     except Exception as e:
         return {"error": f"An error occurred while reading the file: {str(e)}"}
 
-    return {"dfg": dfg_data}
+    return dfg_data
 
 @app.get("/getFilesList")
 async def get_files():
-    dfg_dir = "../data/dfg_json"
+    dfg_dir = DFG_PATH
     try:
         files = [f for f in os.listdir(dfg_dir) if os.path.isfile(os.path.join(dfg_dir, f))]
         for i in range(len(files)):
@@ -112,7 +112,7 @@ async def get_files():
         return {"error": f"Directory '{dfg_dir}' does not exist."}
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
-    return {"files": files}
+    return {files}
 
 
 
