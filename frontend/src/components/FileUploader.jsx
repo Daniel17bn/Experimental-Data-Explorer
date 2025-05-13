@@ -1,32 +1,65 @@
-import React, {useState, ChangeEvent} from 'react';
+import {useState} from 'react';
+import api from '../api';
 
-const UploadStatus = {
-    IDLE: "idle",
-    UPLOADING: "uploading",
-    SUCCESS: "success",
-    ERROR: "error"
-};
 
-function FileUploader(){
+function FileUploader({setFilesList}){
 
     const [file, setFile] = useState(null);
-    const [status,setStatus] = useState(UploadStatus.IDLE)
 
     function handleFileChange(event) {
-        if (event.target.files){
-            setFile(event.target.files[0]);
-            setStatus(UploadStatus.UPLOADING);
+        try{
+            if (event.target.files){
+                setFile(event.target.files[0]);
+            }
+        } catch (error){
+            console.log("Error:",error)
 
         }
     }
 
+    
+    async function handleUpload(event){
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            
+            await api.post('/uploadfile/',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set the content type for file uploads
+                }
+            });
+            console.log("Success uploading the file!");
+            await api.post('/processfile/', {
+                file_name: file.name,
+            });
+            await getFilesList();
+
+        } catch (error){
+            console.log("Error:",error);
+        }
+       
+        setFile(null);
+
+    }
+
+    async function getFilesList(){
+        try{
+            const response = await api.get('/getFilesList/');
+            const fileList = response.data.files
+            setFilesList(fileList);
+            console.log(fileList);
+
+        } catch (error){
+            console.log("Error:",error)
+        }
+    }
 
     return (
         <div>
-            <input type="file" onChange= {handleFileChange}/>
-            {file && status !== UploadStatus.IDLE && <button>Upload File</button>}
-
-
+            <input type="file" onChange={handleFileChange}></input>
+            {file && <button onClick={handleUpload}>Upload File</button>}
+            
         </div>
     );
 };

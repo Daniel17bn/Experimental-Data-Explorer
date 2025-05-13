@@ -112,7 +112,7 @@ async def get_files():
         return {"error": f"Directory '{dfg_dir}' does not exist."}
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
-    return {files}
+    return {'files': files}
 
 
 

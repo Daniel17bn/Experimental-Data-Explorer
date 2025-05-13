@@ -1,7 +1,8 @@
 fastapi
 uvicorn
 pydantic
-pandas
 pm4py
 python-multipart
 neurokit2
+matplotlib
+

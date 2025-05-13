@@ -7,3 +7,5 @@ app/__pycache__/
 data/dfg_json/*
 data/uploads/*
 data/xes/*
+
+.venv/
