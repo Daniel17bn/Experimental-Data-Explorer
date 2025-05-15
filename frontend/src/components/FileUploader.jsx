@@ -9,7 +9,14 @@ function FileUploader({setFilesList}){
     function handleFileChange(event) {
         try{
             if (event.target.files){
-                setFile(event.target.files[0]);
+                const currentFile = event.target.files[0]
+                const fileName = currentFile.name.toLowerCase();
+                if(fileName.endsWith('.csv')){
+                    setFile(currentFile);
+                }else{
+                    alert('Please upload a valid CSV file.')
+                }
+                
             }
         } catch (error){
             console.log("Error:",error)
@@ -34,7 +41,7 @@ function FileUploader({setFilesList}){
                 file_name: file.name,
             });
             await getFilesList();
-
+        
         } catch (error){
             console.log("Error:",error);
         }

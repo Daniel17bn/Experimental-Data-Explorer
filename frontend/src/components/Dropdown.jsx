@@ -3,20 +3,29 @@ import api from '../api'
 import Graph from './Graph'
 
 
-function Dropdown({filesList}){
+function Dropdown({filesList,setSelectedFile}){
+
+  function handleClick(event){
+    setSelectedFile(event.target.value);
+  }
   
   return (
-  <div>
+  
+   <> {filesList.length > 0 && (
+    <div>
     <label htmlFor="dropdown">Select a File:</label>
-    <select id="dropdown" name="dropdown">
-      
-      {filesList.map((file,index)=>
-        <option key={index}>{file}</option>
-      )}
-    </select>
+      <select id="dropdown" name="dropdown">
+        
+        {filesList.map((file,index)=>
+          <option key={index} onClick={handleClick}>{file}</option>
+        )}
+      </select>
     
-  </div>
-
+    </div>
+      )}
+   </>
+    
+  
   )
   
 };

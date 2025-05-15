@@ -7,15 +7,17 @@ import '../App.css';
 
 cytoscape.use(dagre)
 
-function Graph() {
+function Graph({selectedFile}) {
   const [data,setData] = useState(null);
   const [error,setError] = useState(null);
 
   useEffect(() => {
+    setData(null)
+    setError(null)
     api
       .get('/getDFG/', {
         params: {
-          file: 'experiment_log.json'
+          file: selectedFile + '.json'
         }
       })
       .then((response) => {
@@ -25,7 +27,7 @@ function Graph() {
         console.error('Error fetching DFG:', err);
         setError('Failed to fetch DFG data.');
       });
-  },[])
+  },[selectedFile])
 
   if (error) {
     return <div>{error}</div>
@@ -42,6 +44,7 @@ function Graph() {
   
 
   return (
+    <div className='graph'>
     <CytoscapeComponent
       elements={elements}
       style={{ width: '1300px', height: '500px' }}
@@ -82,6 +85,7 @@ function Graph() {
         }
       }
     />
+    </div>
   );
 }
 

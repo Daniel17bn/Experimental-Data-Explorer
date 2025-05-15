@@ -7,20 +7,18 @@ import './App.css';
 function App() {
 
     const [filesList,setFilesList] = useState([]);
-    
+    const [selectedFile,setSelectedFile] = useState(null)
 
     return (
         <>
             <h1>BSP Project</h1>
             <div>
                 <FileUploader setFilesList={setFilesList}/>
-                <DropDown filesList={filesList}/>
+                <DropDown filesList={filesList} setSelectedFile={setSelectedFile}/>
             </div>
             <div style={{ marginTop: '2rem' }}>
-                <h2>Graph Visualization</h2>
-                <div className='graph'>
-                    <Graph/>
-                </div>
+                <h2>Directly Follows Graph</h2>
+                {selectedFile != null && <Graph selectedFile={selectedFile}></Graph>}
                 
             </div>
         </>
