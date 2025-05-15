@@ -120,13 +120,18 @@ async def get_Qst(file:str):
     csv_path = UPLOADS_PATH / f"{file}"
     qst_path = QST_PATH / f"{file.split('.')[0]}.json"
 
-    if not os.path.exists(csv_path):
-        return {"error": f"File '{file}' does not exist in the uploads directory."}
+    
+
 
     try:
-        process_qst(csv_path,qst_path)
+        if not os.path.exists(qst_path):
+            if not os.path.exists(csv_path):
+                return {"error": f"File '{file}' does not exist in the uploads directory."}
+            process_qst(csv_path,qst_path)
+
         with open(qst_path,"r") as f:
             qst_data = json.load(f)
+
         
         
     except Exception as e:
