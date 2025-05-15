@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
 from pydantic import BaseModel
-from scripts import csv_to_xes, xes_dfg
+from scripts import csv_to_xes, xes_dfg,process_qst
 
 # Setup main paths
 BASE_PATH = Path(__file__).resolve().parent
@@ -17,6 +17,7 @@ DATA_PATH = BASE_PATH.parent / "data"
 UPLOADS_PATH = DATA_PATH / "uploads"
 XES_PATH = DATA_PATH / "xes"
 DFG_PATH = DATA_PATH / "dfg_json"
+QST_PATH = DATA_PATH / "qst_json"
 
 ## Make sure that the folders also exist
 UPLOADS_PATH.mkdir(parents=True, exist_ok=True)
@@ -113,6 +114,25 @@ async def get_files():
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
     return {'files': files}
+
+@app.get("/getQst/")
+async def get_Qst(file:str):
+    csv_path = UPLOADS_PATH / f"{file}"
+    qst_path = QST_PATH / f"{file.split('.')[0]}.json"
+
+    if not os.path.exists(csv_path):
+        return {"error": f"File '{file}' does not exist in the uploads directory."}
+
+    try:
+        process_qst(csv_path,qst_path)
+        with open(qst_path,"r") as f:
+            qst_data = json.load(f)
+        
+        
+    except Exception as e:
+        return {"error": f"An error occurred while processing the file: {str(e)}"}
+
+    return qst_data
 
 
 
