@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import FileUploader from './components/FileUploader';
 import Graph from './components/Graph';
 import DropDown from './components/DropDown';
+import Questionnaire from './components/Questionnaire';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 {selectedFile != null && <Graph selectedFile={selectedFile}></Graph>}
                 
             </div>
+            <Questionnaire/>
         </>
     );
 }

@@ -11,7 +11,7 @@ function Dropdown({filesList,setSelectedFile}){
   
   return (
   
-   <> {filesList.length > 0 && (
+   <div className="dropdown"> {filesList.length > 0 && (
     <div>
     <label htmlFor="dropdown">Select a File:</label>
       <select id="dropdown" name="dropdown">
@@ -23,7 +23,7 @@ function Dropdown({filesList,setSelectedFile}){
     
     </div>
       )}
-   </>
+   </div>
     
   
   )

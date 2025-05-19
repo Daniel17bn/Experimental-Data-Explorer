@@ -63,7 +63,7 @@ function FileUploader({setFilesList}){
     }
 
     return (
-        <div>
+        <div className="fileUploader">
             <input type="file" onChange={handleFileChange}></input>
             {file && <button onClick={handleUpload}>Upload File</button>}
             
