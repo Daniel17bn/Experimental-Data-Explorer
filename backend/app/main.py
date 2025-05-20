@@ -120,6 +120,18 @@ async def get_Qst(file:str):
     csv_path = UPLOADS_PATH / f"{file}"
     qst_path = QST_PATH / f"{file.split('.')[0]}.json"
 
+@app.get("/getQstList/")
+async def get_qstFiles():
+    qst_dir = QST_PATH
+    try:
+        files = [f for f in os.listdir(qst_dir) if os.path.isfile(os.path.join(qst_dir, f))]
+        for i in range(len(files)):
+            files[i] = files[i].split(".")[0]
+    except FileNotFoundError:
+        return {"error": f"Directory '{qst_dir}' does not exist."}
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}
+    return {'files': files}
     
 
 
