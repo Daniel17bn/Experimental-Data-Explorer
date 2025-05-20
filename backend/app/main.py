@@ -63,6 +63,7 @@ async def process_file(request: FileNameRequest):
     xes_path = XES_PATH / f'{filename}.xes' # f"../data/xes/{filename}.xes"
     dfg_path = DFG_PATH                   # f"../data/dfg_json/{filename}.json"
     dfg_name = f'{filename}.json' # f"../data/dfg_json/{filename}.json"
+    qst_path = QST_PATH / f'{filename}.json'
 
     # Check if the uploaded file exists
     if not os.path.exists(upload_path):
@@ -79,7 +80,10 @@ async def process_file(request: FileNameRequest):
         dfg = xes_dfg(str(xes_path),str(dfg_path),str(dfg_name))  # Generate the DFG
 
     except Exception as e:
-        return {"error": f"An error occurred during processing: {str(e)}"}
+        if str(e) == "the dataframe should (at least) contain a column for the case identifier, a column for the activity and a column for the timestamp.":
+            process_qst(upload_path,qst_path)
+        else:
+            return {"error": f"An error occurred during processing: {str(e)}"}
 
   
     return {"message": "File processed successfully."}
@@ -120,21 +124,6 @@ async def get_Qst(file:str):
     csv_path = UPLOADS_PATH / f"{file}"
     qst_path = QST_PATH / f"{file.split('.')[0]}.json"
 
-@app.get("/getQstList/")
-async def get_qstFiles():
-    qst_dir = QST_PATH
-    try:
-        files = [f for f in os.listdir(qst_dir) if os.path.isfile(os.path.join(qst_dir, f))]
-        for i in range(len(files)):
-            files[i] = files[i].split(".")[0]
-    except FileNotFoundError:
-        return {"error": f"Directory '{qst_dir}' does not exist."}
-    except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
-    return {'files': files}
-    
-
-
     try:
         if not os.path.exists(qst_path):
             if not os.path.exists(csv_path):
@@ -150,6 +139,19 @@ async def get_qstFiles():
         return {"error": f"An error occurred while processing the file: {str(e)}"}
 
     return qst_data
+
+@app.get("/getQstList/")
+async def get_qstFiles():
+    qst_dir = QST_PATH
+    try:
+        files = [f for f in os.listdir(qst_dir) if os.path.isfile(os.path.join(qst_dir, f))]
+        for i in range(len(files)):
+            files[i] = files[i].split(".")[0]
+    except FileNotFoundError:
+        return {"error": f"Directory '{qst_dir}' does not exist."}
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}
+    return {'files': files}
 
 
 
