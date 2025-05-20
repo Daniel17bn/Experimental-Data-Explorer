@@ -1,7 +1,3 @@
-import { useEffect, useState } from 'react';
-import api from '../api'
-import Graph from './Graph'
-
 
 function Dropdown({filesList,setSelectedFile}){
 

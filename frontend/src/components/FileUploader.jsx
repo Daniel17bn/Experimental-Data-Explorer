@@ -2,7 +2,7 @@ import {useState} from 'react';
 import api from '../api';
 
 
-function FileUploader({setFilesList}){
+function FileUploader({setFilesList,setQstList}){
 
     const [file, setFile] = useState(null);
 
@@ -41,6 +41,7 @@ function FileUploader({setFilesList}){
                 file_name: file.name,
             });
             await getFilesList();
+            await getQstList();
         
         } catch (error){
             console.log("Error:",error);
@@ -56,6 +57,18 @@ function FileUploader({setFilesList}){
             const fileList = response.data.files
             setFilesList(fileList);
             console.log(fileList);
+
+        } catch (error){
+            console.log("Error:",error)
+        }
+    }
+
+    async function getQstList(){
+         try{
+            const response = await api.get('/getQstList/');
+            const qstList = response.data.files
+            setQstList(qstList);
+            console.log(qstList);
 
         } catch (error){
             console.log("Error:",error)
