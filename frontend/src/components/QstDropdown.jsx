@@ -7,7 +7,7 @@ function QstDropdown({qstList,setSelectedQst}){
 
     return (
   
-    <div className="dropdown"> {qstList.length > 0 && (
+    <div className="dropdownQst"> {qstList.length > 0 && (
         <div>
         <label htmlFor="dropdown">Select a Questionnaire:</label>
         <select id="dropdown" name="dropdown">

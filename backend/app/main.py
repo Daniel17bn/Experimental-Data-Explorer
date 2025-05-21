@@ -11,7 +11,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from scripts import csv_to_xes, xes_dfg,process_qst
 
-# Setup main paths
+
 BASE_PATH = Path(__file__).resolve().parent
 DATA_PATH = BASE_PATH.parent / "data"
 UPLOADS_PATH = DATA_PATH / "uploads"
@@ -19,12 +19,12 @@ XES_PATH = DATA_PATH / "xes"
 DFG_PATH = DATA_PATH / "dfg_json"
 QST_PATH = DATA_PATH / "qst_json"
 
-## Make sure that the folders also exist
+
 UPLOADS_PATH.mkdir(parents=True, exist_ok=True)
 XES_PATH.mkdir(parents=True, exist_ok=True)
 DFG_PATH.mkdir(parents=True, exist_ok=True)
 
-# Setup logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ async def upload_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
     return {"info": f"file '{file.filename}' saved"}
 
-# Define the Pydantic model for the request body
+
 class FileNameRequest(BaseModel):
     file_name: str
 
@@ -54,30 +54,30 @@ class FileNameRequest(BaseModel):
 async def process_file(request: FileNameRequest):
 
     logger.info(f"/processfile/: Received the request: {request}")
-    file_name = request.file_name  # Extract the file name from the request
-    filename, _ = os.path.splitext(file_name)  # Extract the filename without extension
+    file_name = request.file_name 
+    filename, _ = os.path.splitext(file_name) 
 
-    # Define paths
+    
 
-    upload_path = UPLOADS_PATH / file_name # f"../data/uploads/{file_name}"
-    xes_path = XES_PATH / f'{filename}.xes' # f"../data/xes/{filename}.xes"
-    dfg_path = DFG_PATH                   # f"../data/dfg_json/{filename}.json"
-    dfg_name = f'{filename}.json' # f"../data/dfg_json/{filename}.json"
+    upload_path = UPLOADS_PATH / file_name 
+    xes_path = XES_PATH / f'{filename}.xes' 
+    dfg_path = DFG_PATH                   
+    dfg_name = f'{filename}.json' 
     qst_path = QST_PATH / f'{filename}.json'
 
-    # Check if the uploaded file exists
+    
     if not os.path.exists(upload_path):
         return {"error": f"File '{upload_path}' does not exist. Please upload it first."}
 
-    # Process the file
+   
     try:
         logger.info(f"/processfile/: Processing the CSV to XES ({upload_path} -> {xes_path})")
-        csv_to_xes(upload_path, xes_path)  # Convert CSV to XES
+        csv_to_xes(upload_path, xes_path)  
 
         logger.info(f"/processfile/: Generating the DFG from the XES")
 
-        # Have to convert from Path to string here since i think pm4py does not support it
-        dfg = xes_dfg(str(xes_path),str(dfg_path),str(dfg_name))  # Generate the DFG
+        
+        dfg = xes_dfg(str(xes_path),str(dfg_path),str(dfg_name))  
 
     except Exception as e:
         if str(e) == "the dataframe should (at least) contain a column for the case identifier, a column for the activity and a column for the timestamp.":
@@ -92,7 +92,7 @@ async def process_file(request: FileNameRequest):
 async def getDFG(file: str):
     dfg_path = DFG_PATH / f'{file}'
 
-    # Check if the file exists
+    
     if not os.path.exists(dfg_path):
         return {"error": f"File '{file}' does not exist in the directory."}
 

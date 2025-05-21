@@ -3,7 +3,7 @@ import api from '../api';
 import CytoscapeComponent from 'react-cytoscapejs';
 import dagre from 'cytoscape-dagre';
 import cytoscape from 'cytoscape';
-import '../App.css';
+
 
 cytoscape.use(dagre)
 
@@ -53,7 +53,7 @@ function Graph({selectedFile}) {
           selector: 'node',
           style: {
             
-            'background-color' : 'rgba(23, 49, 86, 0.7)',
+            'background-color' : '#1a237e',
             'label' : 'data(label)',
             'color': 'black',
             'text-valign': 'top',
@@ -77,10 +77,10 @@ function Graph({selectedFile}) {
       layout={
         {
           name: 'dagre',
-          rankDir: 'LR', // LR = Left to Right (or use 'TB' for Top to Bottom)
-          nodeSep: 50,   // spacing between nodes
-          edgeSep: 10,   // spacing between edges
-          rankSep: 100,  // spacing between layers
+          rankDir: 'LR', 
+          nodeSep: 50,   
+          edgeSep: 10,  
+          rankSep: 100,  
           animate: true
         }
       }

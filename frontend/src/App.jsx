@@ -12,25 +12,29 @@ function App() {
     const [selectedFile,setSelectedFile] = useState(null);
     const [qstList,setQstList] = useState([]);
     const [selectedQst,setSelectedQst] = useState(null);
+    const [showDropdowns, setShowDropdowns] = useState(false);
 
 
     return (
         <>
-            <h1>BSP Project</h1>
-            <div>
-                <FileUploader setFilesList={setFilesList} setQstList={setQstList}/>
-                <DropDown filesList={filesList} setSelectedFile={setSelectedFile}/>
-                <QstDropdown qstList={qstList} setSelectedQst={setSelectedQst}/>
+          <h1>Experimental Data Explorer</h1>
+          <FileUploader
+            setFilesList={setFilesList}
+            setQstList={setQstList}
+            onUploadSuccess={() => setShowDropdowns(true)}
+          />
+          {showDropdowns && (
+            <div className="dropdown-row">
+              <DropDown filesList={filesList} setSelectedFile={setSelectedFile}/>
+              <QstDropdown qstList={qstList} setSelectedQst={setSelectedQst}/>
             </div>
-            <div style={{ marginTop: '2rem' }}>
-                <h2>Directly Follows Graph</h2>
-                {selectedFile != null && <Graph selectedFile={selectedFile}></Graph>}
-                
-            </div>
-            <div>
-                {selectedQst != null && <Questionnaire selectedQst={selectedQst}/>}
-            </div>
-            
+          )}
+          <div style={{ marginTop: '2rem' }}>
+            {selectedFile != null && <Graph selectedFile={selectedFile}></Graph>}
+          </div>
+          <div>
+            {selectedQst != null && <Questionnaire selectedQst={selectedQst}/>}
+          </div>
         </>
     );
 }

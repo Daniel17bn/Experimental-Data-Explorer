@@ -19,7 +19,7 @@ EVENT_TRANSLATION: Dict[str, int] = {
         "bse_trial_end": 86
 }
 
-# Create a reverse EVENT_TRANSLATION
+
 R_EVENT_TRANSLATION: Dict[int, str] = {v: k for k, v in EVENT_TRANSLATION.items()}
 
 
@@ -31,16 +31,16 @@ def csv_to_xes(csv_path:str, xes_path:str):
         column_names = ["time:timestamp","data_type","concept:name"]
         df = pd.read_csv(csv_file, names = column_names, header = None)
 
-        # Filter the dataframe to only include the data_type "event" to make the graph
+       
         df = df[df["data_type"] == "event"]
 
-        # Translate the trigger numbers into actual names
+        
         df["concept:name"] = [R_EVENT_TRANSLATION[int(x)] if int(x) in R_EVENT_TRANSLATION else pd.NA for x in df["concept:name"]]
 
-        # Import the datetimes
+        
         df['time:timestamp'] = pd.to_datetime(df['time:timestamp'])
 
-        # Just set the case name to 1 for now
+        
         df['case:concept:name'] = 1
 
         filtered_df = df.dropna(subset=['time:timestamp', 'case:concept:name', 'concept:name'])

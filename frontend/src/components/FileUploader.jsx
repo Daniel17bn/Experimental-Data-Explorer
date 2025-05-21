@@ -2,7 +2,7 @@ import {useState} from 'react';
 import api from '../api';
 
 
-function FileUploader({setFilesList,setQstList}){
+function FileUploader({setFilesList,setQstList,onUploadSuccess}){
 
     const [file, setFile] = useState(null);
 
@@ -33,7 +33,7 @@ function FileUploader({setFilesList,setQstList}){
             
             await api.post('/uploadfile/',formData,{
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Set the content type for file uploads
+                    'Content-Type': 'multipart/form-data', 
                 }
             });
             console.log("Success uploading the file!");
@@ -48,6 +48,7 @@ function FileUploader({setFilesList,setQstList}){
         }
        
         setFile(null);
+        if (onUploadSuccess) onUploadSuccess();
 
     }
 
