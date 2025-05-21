@@ -2,7 +2,7 @@
 
 ## Overview
 
-BSP-1 is a web application for uploading, processing, and visualizing experimental data and questionnaires. It consists of a FastAPI backend and a React frontend.
+Experimental Data Explorer is a web application for uploading, processing, and visualizing experimental data and questionnaires. It consists of a FastAPI backend and a React frontend.
 
 ## Features
 
