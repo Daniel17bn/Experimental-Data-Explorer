@@ -30,10 +30,10 @@ function App() {
             </div>
           )}
           <div style={{ marginTop: '2rem' }}>
-            {selectedFile != null && <Graph selectedFile={selectedFile}></Graph>}
+            {selectedFile  && <Graph selectedFile={selectedFile}></Graph>}
           </div>
           <div>
-            {selectedQst != null && <Questionnaire selectedQst={selectedQst}/>}
+            {selectedQst  && <Questionnaire selectedQst={selectedQst}/>}
           </div>
         </>
     );
