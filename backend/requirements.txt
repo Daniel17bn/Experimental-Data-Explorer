@@ -3,8 +3,8 @@ uvicorn
 pydantic
 pm4py
 python-multipart
-neurokit2
 matplotlib
 pandas
+numpy
 
 
